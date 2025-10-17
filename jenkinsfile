@@ -1,0 +1,38 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.10-slim'
+            label ''   // Leave empty unless you use a specific agent label
+        }
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Setup') {
+            steps {
+                sh 'python --version'
+            }
+        }
+
+        stage('Run Script') {
+            steps {
+                // Option 1: run directly from inline echo
+                sh 'echo "print(\'Hello, World!\')" > hello.py'
+
+                // Option 2: run the actual file
+                sh 'python hello.py'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
