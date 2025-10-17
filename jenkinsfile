@@ -1,48 +1,37 @@
 pipeline {
-    agent any
+    agent {
+        docker { 
+            image 'python:3.10-slim' 
+            args '-u root:root'  // optional: run as root to install packages
+        }
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clone your Git repo
                 git branch: 'main', url: 'https://github.com/bhagyajkumar/jenkins-learn.git'
             }
         }
 
         stage('Check Python') {
             steps {
-                // Verify Python3 and pip3 are available
                 sh '''
-                echo "Checking Python installation..."
-                which python3 || { echo "python3 not found"; exit 1; }
-                python3 --version
-                pip3 --version
-                '''
-            }
-        }
-
-        stage('Setup Virtual Environment') {
-            steps {
-                // Create venv and activate
-                sh '''
-                echo "Creating virtual environment..."
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
+                echo "Python version:"
+                python --version
+                pip --version
                 '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Install dependencies if requirements.txt exists
                 sh '''
-                . venv/bin/activate
                 if [ -f requirements.txt ]; then
-                    echo "Installing dependencies from requirements.txt..."
+                    echo "Installing dependencies..."
+                    pip install --upgrade pip
                     pip install -r requirements.txt
                 else
-                    echo "No requirements.txt found, skipping."
+                    echo "No requirements.txt found, skipping..."
                 fi
                 '''
             }
@@ -50,15 +39,13 @@ pipeline {
 
         stage('Run Python Script') {
             steps {
-                // Run your Python script inside venv
                 sh '''
-                . venv/bin/activate
                 if [ -f main.py ]; then
                     echo "Running main.py..."
                     python main.py
                 else
-                    echo "No main.py found, running demo Hello World"
-                    echo "print('Hello, World!')" > hello.py
+                    echo "No main.py found, running demo Hello World..."
+                    echo "print('Hello from Docker!')" > hello.py
                     python hello.py
                 fi
                 '''
