@@ -1,25 +1,29 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true) // Prevent Jenkins from doing implicit checkout
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                // Ensure repo is cloned into workspace
+                deleteDir() // Clean workspace first
+                echo 'Cloning repository...'
                 git branch: 'main', url: 'https://github.com/bhagyajkumar/jenkins-learn.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building project...'
-                // your build commands here
+                echo 'Running build stage...'
+                sh 'ls -la' // verify files are cloned
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // your test commands here
+                echo 'Running test stage...'
             }
         }
     }
