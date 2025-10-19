@@ -1,81 +1,26 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.10-slim'
-            // run as root and mount Docker socket for Docker-in-Docker support
-            args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
-
-    environment {
-        PYTHONUNBUFFERED = '1'
-    }
+    agent any
 
     stages {
-        stage('Setup Environment') {
+        stage('Checkout') {
             steps {
-                sh '''
-                echo "Installing basic dependencies..."
-                apt-get update -y
-                apt-get install -y git curl
-                git --version
-                python --version
-                pip --version
-                '''
+                // Ensure repo is cloned into workspace
+                git branch: 'main', url: 'https://github.com/bhagyajkumar/jenkins-learn.git'
             }
         }
 
-        stage('Checkout Code') {
+        stage('Build') {
             steps {
-                // If pipeline is not defined as "Pipeline script from SCM", uncomment the next line
-                // git branch: 'main', url: 'https://github.com/bhagyajkumar/jenkins-learn.git'
-
-                sh '''
-                echo "Repository contents:"
-                ls -lah
-                '''
+                echo 'Building project...'
+                // your build commands here
             }
         }
 
-        stage('Install Python Requirements') {
+        stage('Test') {
             steps {
-                sh '''
-                if [ -f requirements.txt ]; then
-                    echo "Installing Python dependencies..."
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                else
-                    echo "No requirements.txt found, skipping installation..."
-                fi
-                '''
+                echo 'Running tests...'
+                // your test commands here
             }
-        }
-
-        stage('Run Python Script') {
-            steps {
-                sh '''
-                if [ -f main.py ]; then
-                    echo "Running main.py..."
-                    python main.py
-                else
-                    echo "No main.py found — running demo script instead..."
-                    echo "print('Hello from Jenkins inside Docker!')" > demo.py
-                    python demo.py
-                fi
-                '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "✅ Build completed successfully!"
-        }
-        failure {
-            echo "❌ Build failed. Check logs for details."
-        }
-        always {
-            echo "📦 Pipeline finished (cleaning up temporary files if needed)."
         }
     }
 }
