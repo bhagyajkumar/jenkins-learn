@@ -21,7 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running test stage...'
-                sh './venv/bon/python -m pytest'
+                sh './venv/bin/python -m pytest'
 
             }
         }
