@@ -21,12 +21,14 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running test stage...'
+                sh './venv/bon/python -m pytest'
+
             }
         }
 
         stage('Cleanup') {
             steps {
-                echo 'Running test stage...'
+                echo 'Running test Cleanup...'
                 sh 'rm -rf venv/'
             }
         }
