@@ -21,7 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running test stage...'
-                sh './venv/bin/python -m pytest --html=report.html --self-contained-html --css=highcontrast.css --css=accessible.css'
+                sh './venv/bin/python -m pytest --html=report.html --self-contained-html'
 
             }
         }
