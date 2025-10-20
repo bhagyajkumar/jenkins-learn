@@ -1,6 +1,20 @@
 pipeline {
     agent any
 
+    post {
+        always {
+            publishHTML(target: [
+                reportName: 'Pytest Report',
+                reportDir: '.',
+                reportFiles: 'report.html',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: false
+            ])
+        }
+    }
+
+
     stages {
         stage('Checkout') {
             steps {
