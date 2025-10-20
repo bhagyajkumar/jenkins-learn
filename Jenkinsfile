@@ -13,7 +13,7 @@ pipeline {
         stage('VirtualEnvironment') {
             steps {
                 echo 'Running build stage...'
-                sh 'python3 -m venv venv && source venv/bin/activate'
+                sh 'python3 -m venv venv && . venv/bin/activate && echo "Virtual env activated"'
             }
         }
 
