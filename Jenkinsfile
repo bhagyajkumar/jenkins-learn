@@ -26,6 +26,14 @@ pipeline {
             }
         }
 
+        stage('Archive Report') {
+            steps {
+                echo 'Archiving test report...'
+                archiveArtifacts artifacts: 'report.html', fingerprint: true
+            }
+        }
+
+
         stage('Cleanup') {
             steps {
                 echo 'Running test Cleanup...'
