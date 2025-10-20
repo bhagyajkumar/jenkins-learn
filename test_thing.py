@@ -1,2 +1,2 @@
-test_thing():
+def test_thing():
     assert True
