@@ -3,17 +3,17 @@ pipeline {
 
     post {
         always {
+            // Publish styled Pytest report after every run
             publishHTML(target: [
                 reportName: 'Pytest Report',
-                reportDir: '.',
-                reportFiles: 'report.html',
+                reportDir: 'report',
+                reportFiles: 'index.html',
                 keepAll: true,
                 alwaysLinkToLastBuild: true,
                 allowMissing: false
             ])
         }
     }
-
 
     stages {
         stage('Checkout') {
@@ -24,35 +24,40 @@ pipeline {
             }
         }
 
-        stage('VirtualEnvironment') {
+        stage('Setup Virtual Environment') {
             steps {
-                echo 'Running build stage...'
-                sh 'python3 -m venv venv && . venv/bin/activate && echo "Virtual env activated"'
-                sh 'venv/bin/pip install -r requirements.txt'
+                echo 'Setting up virtual environment...'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    pip install pytest pytest-html-reporter
+                '''
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                echo 'Running test stage...'
-                sh './venv/bin/python -m pytest --html=report.html --self-contained-html'
-
+                echo 'Running tests with pytest-html-reporter...'
+                sh '''
+                    . venv/bin/activate
+                    pytest --html-report=report --title="Pytest Report" --maxfail=1 --disable-warnings -q
+                '''
             }
         }
 
         stage('Archive Report') {
             steps {
-                echo 'Archiving test report...'
-                archiveArtifacts artifacts: 'report.html', fingerprint: true
+                echo 'Archiving report...'
+                archiveArtifacts artifacts: 'report/**', fingerprint: true
             }
         }
 
-
         stage('Cleanup') {
             steps {
-                echo 'Running test Cleanup...'
+                echo 'Cleaning up virtual environment...'
                 sh 'rm -rf venv/'
-                sh 'rm report.html'
             }
         }
     }
