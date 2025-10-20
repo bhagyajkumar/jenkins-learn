@@ -4,12 +4,12 @@ pipeline {
     post {
         always {
             publishHTML(target: [
-                reportName: 'Pytest Report',
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
                 reportDir: '.',
                 reportFiles: 'report.html',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: false
+                reportName: 'Pytest HTML Report'
             ])
         }
     }
