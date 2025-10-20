@@ -42,7 +42,7 @@ pipeline {
                 echo 'Running tests with pytest-html-reporter...'
                 sh '''
                     . venv/bin/activate
-                    pytest --html-report=report --title="Pytest Report" --maxfail=1 --disable-warnings -q
+                    pytest --html=report.html --title="Pytest Report"
                 '''
             }
         }
