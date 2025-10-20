@@ -1,29 +1,32 @@
 pipeline {
     agent any
 
-    options {
-        skipDefaultCheckout(true) // Prevent Jenkins from doing implicit checkout
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                deleteDir() // Clean workspace first
+                deleteDir()
                 echo 'Cloning repository...'
                 git branch: 'main', url: 'https://github.com/bhagyajkumar/jenkins-learn.git'
             }
         }
 
-        stage('Build') {
+        stage('VirtualEnvironment') {
             steps {
                 echo 'Running build stage...'
-                sh 'python3 --version' // verify files are cloned
+                sh 'python3 -m venv venv && source venv/bin/activate'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running test stage...'
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                echo 'Running test stage...'
+                sh 'rm -rf venv/'
             }
         }
     }
