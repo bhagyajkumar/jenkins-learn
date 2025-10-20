@@ -52,6 +52,7 @@ pipeline {
             steps {
                 echo 'Running test Cleanup...'
                 sh 'rm -rf venv/'
+                sh 'rm report.html'
             }
         }
     }
