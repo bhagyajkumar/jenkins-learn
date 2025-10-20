@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build stage...'
-                sh 'ls -la' // verify files are cloned
+                sh 'python --version' // verify files are cloned
             }
         }
 
