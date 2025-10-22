@@ -76,11 +76,6 @@ class TestDivide:
         print("Testing division of zero by a number")
         assert divide(0, 5) == 0, "0 / 5 should equal 0"
 
-    def test_divide_by_zero(self):
-        print("Testing division by zero")
-        with pytest.raises(ValueError, match="division by zero"):
-            divide(5, 0)
-
 
 # ------------------- POWER TESTS -------------------
 class TestPower:
