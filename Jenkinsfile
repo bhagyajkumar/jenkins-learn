@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                    pytest --html=report.html --self-contained-html --junitxml=report.xml -v --capture=tee-sys
+                    pytest --html=report.html --self-contained-html --junitxml=report.xml -v --capture=tee-sys --alluredir=allure-results
                 '''
             }
         }
@@ -32,11 +32,12 @@ pipeline {
         stage('Allure Report') {
             steps {
                 sh '''
+                    . venv/bin/activate
                     pytest --alluredir=allure-results -v
                 '''
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
         }
+
 
 
         stage('Convert HTML to PDF') {
