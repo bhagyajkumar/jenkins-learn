@@ -3,6 +3,7 @@ pipeline {
 
     post {
         always {
+            // Publish HTML report
             publishHTML(target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
@@ -14,7 +15,6 @@ pipeline {
         }
     }
 
-
     stages {
         stage('Checkout') {
             steps {
@@ -24,35 +24,51 @@ pipeline {
             }
         }
 
-        stage('VirtualEnvironment') {
+        stage('Setup Environment') {
             steps {
-                echo 'Running build stage...'
-                sh 'python3 -m venv venv && . venv/bin/activate && echo "Virtual env activated"'
-                sh 'venv/bin/pip install -r requirements.txt'
+                echo 'Creating and activating virtual environment...'
+                // Create venv, activate it, and install requirements in one shell session
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running test stage...'
-                sh './venv/bin/python -m pytest --html=report.html -v'
-
+                echo 'Running Pytest...'
+                // Run Pytest and generate HTML report
+                sh '''
+                    . venv/bin/activate
+                    pytest --html=report.html -v
+                '''
             }
         }
 
-        stage('Archive Report') {
+        stage('Convert HTML to PDF') {
             steps {
-                echo 'Archiving test report...'
-                archiveArtifacts artifacts: 'report.html', fingerprint: true
+                echo 'Converting HTML report to PDF...'
+                // Requires wkhtmltopdf installed on Jenkins agent
+                sh '''
+                    wkhtmltopdf report.html report.pdf
+                '''
             }
         }
 
+        stage('Archive Reports') {
+            steps {
+                echo 'Archiving HTML and PDF reports...'
+                archiveArtifacts artifacts: 'report.html, report.pdf', fingerprint: true
+            }
+        }
 
         stage('Cleanup') {
             steps {
-                echo 'Running test Cleanup...'
-                sh 'rm -rf venv/'
-                sh 'rm report.html'
+                echo 'Cleaning up...'
+                sh 'rm -rf venv/ report.html report.pdf'
             }
         }
     }
