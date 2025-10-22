@@ -43,7 +43,7 @@ pipeline {
                 // Run Pytest and generate HTML report
                 sh '''
                     . venv/bin/activate
-                    pytest --html=report.html -v
+                    pytest --html=report.html -v --self-contained-html --capture=tee-sys 
                 '''
             }
         }
