@@ -12,6 +12,9 @@ pipeline {
                 reportFiles: 'report.html',
                 reportName: 'Pytest HTML Report'
             ])
+
+            // Publish JUnit XML report
+            junit 'report.xml'
         }
     }
 
@@ -27,7 +30,6 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 echo 'Creating and activating virtual environment...'
-                // Create venv, activate it, and install requirements in one shell session
                 sh '''
                     python3 -m venv venv
                     . venv/bin/activate
@@ -40,10 +42,10 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Pytest...'
-                // Run Pytest and generate HTML report
                 sh '''
                     . venv/bin/activate
-                    pytest --html=report.html -v --self-contained-html --capture=tee-sys 
+                    # Run tests, generate HTML and JUnit XML reports, capture console logs
+                    pytest --html=report.html --self-contained-html --junitxml=report.xml -v --capture=tee-sys
                 '''
             }
         }
@@ -67,7 +69,7 @@ pipeline {
         stage('Cleanup') {
             steps {
                 echo 'Cleaning up...'
-                sh 'rm -rf venv/ report.html report.pdf'
+                sh 'rm -rf venv/ report.html report.pdf report.xml'
             }
         }
     }
