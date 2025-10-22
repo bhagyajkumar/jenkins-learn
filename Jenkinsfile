@@ -51,9 +51,8 @@ pipeline {
         stage('Convert HTML to PDF') {
             steps {
                 echo 'Converting HTML report to PDF...'
-                // Requires wkhtmltopdf installed on Jenkins agent
                 sh '''
-                    wkhtmltopdf report.html report.pdf
+                    wkhtmltopdf --enable-local-file-access report.html report.pdf
                 '''
             }
         }
