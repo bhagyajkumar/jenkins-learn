@@ -1,68 +1,77 @@
 import pytest
 from calculator import add, subtract, multiply, divide, power
 
-# --- ADDITION TESTS ---
-def test_add_positive():
-    assert add(5, 7) == 12
+# ------------------- ADDITION TESTS -------------------
+class TestAdd:
+    def test_add_positive(self):
+        assert add(5, 7) == 12
 
-def test_add_negative():
-    assert add(-3, -6) == -9
+    def test_add_negative(self):
+        assert add(-3, -6) == -9
 
-def test_add_mixed():
-    assert add(-4, 6) == 2
+    def test_add_mixed(self):
+        assert add(-4, 6) == 2
 
-def test_add_zero():
-    assert add(0, 5) == 5
+    def test_add_zero(self):
+        assert add(0, 5) == 5
 
-# --- SUBTRACTION TESTS ---
-def test_subtract_positive():
-    assert subtract(10, 4) == 6
 
-def test_subtract_negative():
-    assert subtract(-5, -3) == -2
+# ------------------- SUBTRACTION TESTS -------------------
+class TestSubtract:
+    def test_subtract_positive(self):
+        assert subtract(10, 4) == 6
 
-def test_subtract_mixed():
-    assert subtract(3, -2) == 5
+    def test_subtract_negative(self):
+        assert subtract(-5, -3) == -2
 
-def test_subtract_zero():
-    assert subtract(0, 7) == -7
+    def test_subtract_mixed(self):
+        assert subtract(3, -2) == 5
 
-# --- MULTIPLICATION TESTS ---
-def test_multiply_positive():
-    assert multiply(3, 4) == 12
+    def test_subtract_zero(self):
+        assert subtract(0, 7) == -7
 
-def test_multiply_negative():
-    assert multiply(-2, -5) == 10
 
-def test_multiply_mixed():
-    assert multiply(-3, 6) == -18
+# ------------------- MULTIPLICATION TESTS -------------------
+class TestMultiply:
+    def test_multiply_positive(self):
+        assert multiply(3, 4) == 12
 
-def test_multiply_zero():
-    assert multiply(0, 100) == 0
+    def test_multiply_negative(self):
+        assert multiply(-2, -5) == 10
 
-# --- DIVISION TESTS ---
-def test_divide_positive():
-    assert divide(10, 2) == 5
+    def test_multiply_mixed(self):
+        assert multiply(-3, 6) == -18
 
-def test_divide_negative():
-    assert divide(-9, -3) == 3
+    def test_multiply_zero(self):
+        assert multiply(0, 100) == 0
 
-def test_divide_mixed():
-    assert divide(-8, 2) == -4
 
-def test_divide_zero_numerator():
-    assert divide(0, 5) == 0
+# ------------------- DIVISION TESTS -------------------
+class TestDivide:
+    def test_divide_positive(self):
+        assert divide(10, 2) == 5
 
-def test_divide_by_zero():
-    with pytest.raises(ValueError):
-        divide(5, 0)
+    def test_divide_negative(self):
+        assert divide(-9, -3) == 3
 
-# --- POWER TESTS ---
-def test_power_positive():
-    assert power(2, 3) == 8
+    def test_divide_mixed(self):
+        assert divide(-8, 2) == -4
 
-def test_power_zero_exponent():
-    assert power(5, 0) == 1
+    def test_divide_zero_numerator(self):
+        assert divide(0, 5) == 0
 
-def test_power_negative_exponent():
-    assert power(2, -2) == 0.25
+    def test_divide_by_zero(self):
+        with pytest.raises(ValueError):
+            divide(5, 0)
+
+
+# ------------------- POWER TESTS -------------------
+class TestPower:
+    def test_power_positive(self):
+        assert power(2, 3) == 8
+
+    def test_power_zero_exponent(self):
+        assert power(5, 0) == 1
+
+    def test_power_negative_exponent(self):
+        assert power(2, -2) == 0.25
