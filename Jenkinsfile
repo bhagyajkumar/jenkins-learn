@@ -35,6 +35,8 @@ pipeline {
                     . venv/bin/activate
                     pytest --alluredir=allure-results -v
                 '''
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+
             }
         }
 
