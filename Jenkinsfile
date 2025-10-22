@@ -44,9 +44,9 @@ pipeline {
                 echo 'Running Pytest...'
                 sh '''
                     . venv/bin/activate
-                    # Run tests, generate HTML and JUnit XML reports, capture console logs
-                    pytest --html=report.html --self-contained-html --junitxml=report.xml -v --capture=tee-sys
+                    pytest --html=report.html --self-contained-html --junitxml=$WORKSPACE/report.xml -v --capture=tee-sys
                 '''
+
             }
         }
 
