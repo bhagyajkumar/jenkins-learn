@@ -29,6 +29,16 @@ pipeline {
             }
         }
 
+        stage('Allure Report') {
+            steps {
+                sh '''
+                    pytest --alluredir=allure-results -v
+                '''
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            }
+        }
+
+
         stage('Convert HTML to PDF') {
             steps {
                 sh 'wkhtmltopdf --enable-local-file-access report.html report.pdf'
